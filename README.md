@@ -1,9 +1,16 @@
-# mqtt-rpc
+# mqtt-rpc [![Build Status](https://travis-ci.org/wolfeidau/mqtt-rpc.png?branch=master)](https://travis-ci.org/wolfeidau/mqtt-rpc)
 
 This module provides an rpc interface for an mqtt connection, in essence this is a request and response strategy which uses
 an MQTT topic structure as transport.
 
-[![Build Status](https://travis-ci.org/wolfeidau/mqtt-rpc.png?branch=master)](https://travis-ci.org/wolfeidau/mqtt-rpc)
+[![NPM](https://nodei.co/npm/mqtt-rpc.png)](https://nodei.co/npm/mqtt-rpc/)
+[![NPM](https://nodei.co/npm-dl/mqtt-rpc.png)](https://nodei.co/npm/mqtt-rpc/)
+
+## Installation
+
+```
+npm install mqtt-rpc
+```
 
 # server
 
@@ -39,21 +46,6 @@ var client = mqttrpc.client(mqttclient);
 client.callRemote('$RPC/time', 'localtime', {}, function(err, data){
   debug('callRemote', err, data);
 });
-```
-
-# How it works
-
-When provided with a prefix this module will configure a topic per call, in the example above it will create a topic as follows:
-
-```
-$API/localtime/req
-```
-
-As well as a back channel for the responses, the correlation id will be included in the topic name. The client will `subscribe` to
-`$API/localtime/res/#` and dispatch responses based on the correlation id.
-
-```
-$API/localtime/res/b10b946f902e48a3bf71eaa248da03b9
 ```
 
 ## License
