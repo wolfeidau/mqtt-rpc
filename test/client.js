@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var chai = require('chai');
 var mqtt = require('mqtt');
