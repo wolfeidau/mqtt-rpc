@@ -21,8 +21,10 @@ var mqtt = require('mqtt');
 var mqttrpc = require('mqtt-rpc');
 var debug = require('debug')('remote-time:server');
 
-var client = mqtt.createClient();
-var server = mqttrpc.server(client);
+var mqttclient = mqtt.createClient();
+var server = mqttrpc.server(mqttclient);
+
+server.format('json');
 
 server.provide('$RPC/time', 'localtime', function (args, cb) {
   debug('localtime');
