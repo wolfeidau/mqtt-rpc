@@ -11,16 +11,18 @@ describe('combined', function () {
 
   it('server respond to a request from the client', function (done) {
 
+    var mqttclient = mqtt.createClient();
+
     var prefix = "$RPC/time3";
 
-    var server = mqttrpc.server(mqtt.createClient());
+    var server = mqttrpc.server(mqttclient);
 
     server.provide(prefix, 'localtime', function (args, cb) {
       debug('localtime');
       cb(null, new Date());
     });
 
-    var client = mqttrpc.client(mqtt.createClient());
+    var client = mqttrpc.client(mqttclient);
 
     client.callRemote(prefix, 'localtime', {}, function (err, data) {
       debug('callRemote', err, data);
