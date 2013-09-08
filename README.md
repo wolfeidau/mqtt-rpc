@@ -1,4 +1,4 @@
-# mqtt-rpc [![Build Status](https://travis-ci.org/wolfeidau/mqtt-rpc.png?branch=master)](https://travis-ci.org/wolfeidau/mqtt-rpc)
+# mqtt-rpc [![Build Status](https://drone.io/github.com/wolfeidau/mqtt-rpc/status.png)](https://drone.io/github.com/wolfeidau/mqtt-rpc/latest)
 
 This module provides an rpc interface for an mqtt connection, in essence this is a request and response strategy which uses
 an MQTT topic structure as transport.
@@ -17,15 +17,29 @@ npm install mqtt-rpc
 Exposes an array of functions which retrieves and returns data.
 
 ```javascript
-var mqtt = require('mqtt');
-var mqttrpc = require('mqtt-rpc');
-var debug = require('debug')('remote-time:server');
+var mqtt = require('mqtt')
+  , mqttrpc = require('mqtt-rpc')
+  , debug = require('debug')('remote-time:server')
+  , host = 'localhost'
+  , port = '1883';
 
-var mqttclient = mqtt.createClient();
+var settings = {
+  keepalive: 1000,
+  protocolId: 'MQIsdp',
+  protocolVersion: 3,
+  clientId: 'server-1'
+}
+
+// client connection
+var mqttclient = mqtt.createClient(port, host, settings);
+
+// build a mqtt new RPC server
 var server = mqttrpc.server(mqttclient);
 
+// optionally configure the codec, which defaults to JSON, also supports msgpack
 server.format('json');
 
+// provide a new method
 server.provide('$RPC/time', 'localtime', function (args, cb) {
   debug('localtime');
   cb(null, new Date());
@@ -37,14 +51,29 @@ server.provide('$RPC/time', 'localtime', function (args, cb) {
 Consumes the api exposed by the previous example.
 
 ```javascript
-var mqtt = require('mqtt');
-var mqttrpc = require('mqtt-rpc');
-var debug = require('debug')('remote-time:client');
+var mqtt = require('mqtt')
+  , mqttrpc = require('mqtt-rpc')
+  , debug = require('debug')('remote-time:client')
+  , host = 'localhost'
+  , port = '1883';
 
-var mqttclient = mqtt.createClient();
+var settings = {
+  keepalive: 1000,
+  protocolId: 'MQIsdp',
+  protocolVersion: 3,
+  clientId: 'client-1'
+}
 
+// client connection
+var mqttclient = mqtt.createClient(port, host, settings);
+
+// build a new RPC client
 var client = mqttrpc.client(mqttclient);
 
+// optionally configure the codec, which defaults to JSON, also supports msgpack
+client.format('json');
+
+// call the remote method
 client.callRemote('$RPC/time', 'localtime', {}, function(err, data){
   debug('callRemote', err, data);
 });

@@ -10,3 +10,7 @@ exports.server = function(mqttclient){
 exports.client = function(mqttclient){
   return new Client(mqttclient);
 };
+
+exports.codecs = function(){
+  return require('./lib/codecs.js');
+};
