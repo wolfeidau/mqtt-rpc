@@ -8,20 +8,16 @@ var expect = chai.expect;
 
 var Server = require('../lib/server.js');
 
-var client;
-
 function generator () {
   return crypto.randomBytes(5).readUInt32BE(0).toString(16);
 }
 
 describe('server', function () {
 
-  before(function () {
-    debug('createClient', 'encoding');
-    client = mqtt.createClient();
-  });
-
   it('should respond to a request', function (done) {
+
+    debug('createClient');
+    var client = mqtt.createClient();
 
     var prefix = '$RPC/time1';
 
@@ -33,10 +29,11 @@ describe('server', function () {
     client
       .subscribe(replyTopic)
       .on('message', function (topic, message) {
-
-        debug('message', topic, message);
-
-        done();
+        // this sees all subscriptions so be careful.
+        if (topic == replyTopic) {
+          debug('message!!!!!', topic, message);
+          done();
+        }
 
       });
 

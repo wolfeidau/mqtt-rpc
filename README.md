@@ -19,19 +19,14 @@ Exposes an array of functions which retrieves and returns data.
 ```javascript
 var mqtt = require('mqtt')
   , mqttrpc = require('mqtt-rpc')
-  , debug = require('debug')('remote-time:server')
-  , host = 'localhost'
-  , port = '1883';
+  , debug = require('debug')('remote-time:server');
 
 var settings = {
-  keepalive: 1000,
-  protocolId: 'MQIsdp',
-  protocolVersion: 3,
-  clientId: 'server-1'
+  reconnectPeriod: 5000 // chill on the reconnects
 }
 
 // client connection
-var mqttclient = mqtt.createClient(port, host, settings);
+var mqttclient = mqtt.connect('mqtt://localhost', settings);
 
 // build a mqtt new RPC server
 var server = mqttrpc.server(mqttclient);
@@ -53,19 +48,14 @@ Consumes the api exposed by the previous example.
 ```javascript
 var mqtt = require('mqtt')
   , mqttrpc = require('mqtt-rpc')
-  , debug = require('debug')('remote-time:client')
-  , host = 'localhost'
-  , port = '1883';
+  , debug = require('debug')('remote-time:client');
 
 var settings = {
-  keepalive: 1000,
-  protocolId: 'MQIsdp',
-  protocolVersion: 3,
-  clientId: 'client-1'
+  reconnectPeriod: 5000 // chill on the reconnects
 }
 
 // client connection
-var mqttclient = mqtt.createClient(port, host, settings);
+var mqttclient = mqtt.connect('mqtt://localhost', settings);
 
 // build a new RPC client
 var client = mqttrpc.client(mqttclient);
