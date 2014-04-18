@@ -1,6 +1,6 @@
 {
   "name": "mqtt-rpc",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "This module provides an rpc interface for MQTT.",
   "main": "index.js",
   "scripts": {
